@@ -10,7 +10,10 @@ const images = await Promise.all(
 );
 ---
 
-<header data-hero class="relative h-540 w-full cursor-pointer overflow-hidden">
+<header
+	data-hero
+	class="relative min-h-540 h-[50vh] w-full cursor-pointer overflow-hidden"
+>
 	{
 		images.map((img, i) => (
 			<Picture
