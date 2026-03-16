@@ -1,0 +1,82 @@
+<div
+	class="bg-black text-white font-telegraf h-42 flex items-center overflow-hidden fixed top-0 inset-x-0 z-50"
+>
+	<div data-ticker-track class="flex shrink-0" aria-hidden="false">
+		<span
+			data-ticker-segment
+			class="flex shrink-0 items-center gap-10 px-5"
+		>
+			<span>COMING SOON/OPENING AUTUMN 2026</span>
+			<span>–</span>
+		</span>
+	</div>
+</div>
+
+<style>
+	@keyframes ticker {
+		0% {
+			transform: translateX(0);
+		}
+		100% {
+			transform: translateX(-50%);
+		}
+	}
+
+	[data-ticker-track] {
+		animation: ticker var(--ticker-duration, 20s) linear infinite;
+	}
+</style>
+
+<script>
+	const SPEED = 60; // pixels per second — constant regardless of width
+
+	function setupTicker(track: HTMLElement) {
+		const template = track.querySelector("[data-ticker-segment]");
+		if (!template) return;
+
+		// Pause animation while we recalculate
+		track.style.animationPlayState = "paused";
+
+		// Remove all clones, keep only the original template
+		const clones = track.querySelectorAll(
+			"[data-ticker-segment]:not(:first-child)",
+		);
+		clones.forEach((el) => el.remove());
+
+		const segmentWidth = template.getBoundingClientRect().width;
+		const viewportWidth = window.innerWidth;
+
+		// Need enough segments so that half the track covers the viewport
+		const copiesNeeded = Math.ceil(viewportWidth / segmentWidth) + 1;
+		const totalSegments = copiesNeeded * 2;
+
+		for (let i = 1; i < totalSegments; i++) {
+			const clone = template.cloneNode(true) as HTMLElement;
+			clone.setAttribute("aria-hidden", "true");
+			track.appendChild(clone);
+		}
+
+		// Half the track is what scrolls across, so duration = half-width / speed
+		const halfWidth = segmentWidth * copiesNeeded;
+		const duration = halfWidth / SPEED;
+		track.style.setProperty("--ticker-duration", `${duration}s`);
+
+		// Resume
+		track.style.animationPlayState = "running";
+	}
+
+	function initTickers() {
+		const tracks = document.querySelectorAll<HTMLElement>(
+			"[data-ticker-track]",
+		);
+		tracks.forEach(setupTicker);
+	}
+
+	initTickers();
+
+	let resizeTimer: ReturnType<typeof setTimeout>;
+	window.addEventListener("resize", () => {
+		clearTimeout(resizeTimer);
+		resizeTimer = setTimeout(initTickers, 150);
+	});
+</script>

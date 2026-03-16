@@ -1,0 +1,122 @@
+<div class="w-full max-w-400 text-12 flex flex-col items-center gap-24">
+	<form
+		data-newsletter-form
+		class="flex font-telegraf leading-0 flex-wrap w-full"
+	>
+		<input
+			type="email"
+			name="email"
+			required
+			placeholder="Enter your email"
+			class="border border-black sm:border-r-0 px-18 pt-10 pb-12 focus:outline-none grow h-36"
+		/>
+		<button
+			type="submit"
+			data-newsletter-button
+			class="transition-colors border-black border hover:text-black hover:bg-white bg-black text-white px-35 pt-10 pb-12 min-w-120 h-36 w-full sm:w-auto"
+		>
+			Subscribe
+		</button>
+	</form>
+	<p data-newsletter-message class="text-center">
+		Stay connected for updates on our opening, reservations and events.
+	</p>
+</div>
+
+<script is:inline>
+	const MAILCHIMP_URL =
+		"https://williamhibberd.us20.list-manage.com/subscribe/post-json";
+	const MAILCHIMP_U = "0f3c3d9e1743c703ed3f1b794";
+	const MAILCHIMP_ID = "2afca5fd86";
+
+	function setupNewsletter(form) {
+		const button = form.querySelector("[data-newsletter-button]");
+		const message = form.parentElement.querySelector(
+			"[data-newsletter-message]",
+		);
+		const input = form.querySelector('input[name="email"]');
+		const defaultMessage = message.textContent;
+
+		function resetState() {
+			setTimeout(function () {
+				button.disabled = false;
+				button.textContent = "Subscribe";
+				message.textContent = defaultMessage;
+			}, 4000);
+		}
+
+		function jsonp(url) {
+			return new Promise(function (resolve, reject) {
+				const callbackName = "mc_cb_" + Date.now();
+				const script = document.createElement("script");
+				script.src = url + "&c=" + callbackName;
+
+				window[callbackName] = function (data) {
+					delete window[callbackName];
+					script.remove();
+					resolve(data);
+				};
+
+				script.onerror = function () {
+					delete window[callbackName];
+					script.remove();
+					reject(new Error("Network error"));
+				};
+
+				document.body.appendChild(script);
+			});
+		}
+
+		function submit(email) {
+			button.disabled = true;
+			button.textContent = "Submitting";
+
+			const params = new URLSearchParams({
+				u: MAILCHIMP_U,
+				id: MAILCHIMP_ID,
+				EMAIL: email,
+			});
+
+			jsonp(MAILCHIMP_URL + "?" + params)
+				.then(function (data) {
+					if (data.result === "success") {
+						button.textContent = "Subscribed";
+						input.value = "";
+						message.textContent = "Thank you for subscribing!";
+					} else {
+						button.textContent = "Error";
+						var cleanMsg = data.msg.replace(/<[^>]*>/g, "");
+						if (
+							cleanMsg
+								.toLowerCase()
+								.includes("already subscribed")
+						) {
+							message.textContent =
+								"This email is already subscribed.";
+						} else {
+							message.textContent = cleanMsg;
+						}
+						console.error("Mailchimp error:", data.msg);
+					}
+					resetState();
+				})
+				.catch(function (err) {
+					button.textContent = "Error";
+					message.textContent =
+						"Something went wrong. Please try again.";
+					console.error("Newsletter error:", err);
+					resetState();
+				});
+		}
+
+		form.addEventListener("submit", function (e) {
+			e.preventDefault();
+			var email = input.value.trim();
+			if (email) submit(email);
+		});
+	}
+
+	document
+		.querySelectorAll("[data-newsletter-form]")
+		.forEach(setupNewsletter);
+</script>

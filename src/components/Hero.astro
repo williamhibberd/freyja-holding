@@ -1,0 +1,65 @@
+---
+import { Picture } from "astro:assets";
+
+const imageFiles = import.meta.glob<{ default: ImageMetadata }>(
+	"../images/*.{jpg,jpeg,png,webp}",
+);
+
+const images = await Promise.all(
+	Object.values(imageFiles).map((resolver) => resolver()),
+);
+---
+
+<header data-hero class="relative h-540 w-full cursor-pointer overflow-hidden">
+	{
+		images.map((img, i) => (
+			<Picture
+				src={img.default}
+				formats={["avif", "webp"]}
+				alt=""
+				widths={[640, 960, 1280, 1920]}
+				sizes="100vw"
+				class:list={[
+					"absolute inset-0 h-full w-full object-cover transition-opacity duration-1200",
+					i === 0 ? "opacity-100" : "opacity-0",
+				]}
+				data-hero-image
+				loading={i === 0 ? "eager" : "lazy"}
+			/>
+		))
+	}
+</header>
+
+<script>
+	function setupHero(hero: HTMLElement) {
+		const images = hero.querySelectorAll<HTMLElement>("[data-hero-image]");
+		if (images.length <= 1) return;
+
+		let current = 0;
+		let timer: ReturnType<typeof setTimeout>;
+
+		function show(index: number) {
+			images[current].style.opacity = "0";
+			current = index;
+			images[current].style.opacity = "1";
+		}
+
+		function next() {
+			show((current + 1) % images.length);
+		}
+
+		function startTimer() {
+			timer = setInterval(next, 6000);
+		}
+
+		hero.addEventListener("click", () => {
+			clearInterval(timer);
+			next();
+			startTimer();
+		});
+
+		startTimer();
+	}
+
+	document.querySelectorAll<HTMLElement>("[data-hero]").forEach(setupHero);
+</script>

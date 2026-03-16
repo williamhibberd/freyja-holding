@@ -1,7 +1,11 @@
 ---
-
+import "../styles/global.css";
+import Ticker from "../components/Ticker.astro";
+import Hero from "../components/Hero.astro";
+import Main from "../components/Main.astro";
 ---
 
+<!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
@@ -9,9 +13,20 @@
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<meta
+			name="description"
+			content="The foremost haven in Northern dining, displaying true elegance, exceptional service, and celebrating the best of Nordic and Northumbrian flavour."
+		/>
+		<title>FREYJA</title>
 	</head>
-	<body>
-		<h1>Astro</h1>
+	<body style="opacity: 0">
+		<Ticker />
+		<Hero />
+		<Main />
+		<script is:inline>
+			document.body.addEventListener("animationstart", () => {
+				document.body.style.removeProperty("opacity");
+			}, { once: true });
+		</script>
 	</body>
 </html>
