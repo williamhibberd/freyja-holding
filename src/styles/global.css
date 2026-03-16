@@ -100,13 +100,7 @@
 
 	body {
 		@apply leading-default tracking-default text-default font-romie max-w-vw flex min-h-dvh w-screen flex-col overflow-x-clip;
-		animation: fade-in 1s ease 0.5s both;
-	}
-
-	@keyframes fade-in {
-		from {
-			opacity: 0;
-		}
+		transition: opacity 1s ease;
 	}
 
 	main {

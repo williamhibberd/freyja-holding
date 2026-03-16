@@ -23,10 +23,10 @@ import Main from "../components/Main.astro";
 		<Ticker />
 		<Hero />
 		<Main />
-		<script is:inline>
-			document.body.addEventListener("animationstart", () => {
-				document.body.style.removeProperty("opacity");
-			}, { once: true });
-		</script>
 	</body>
+	<script is:inline>
+		requestAnimationFrame(() => {
+			document.body.style.removeProperty("opacity");
+		});
+	</script>
 </html>
