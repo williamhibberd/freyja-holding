@@ -5,8 +5,7 @@
 	--color-current: currentColor;
 	--color-inherit: inherit;
 	--color-transparent: transparent;
-	--color-white: #ffffff;
-	--color-off-white: #f2efe5;
+	--color-white: #f2efe5;
 	--color-black: #000000;
 
 	/* Spacing */
@@ -100,7 +99,7 @@
 	}
 
 	body {
-		@apply leading-default tracking-default text-default font-romie max-w-vw flex min-h-dvh w-screen flex-col overflow-x-clip bg-off-white;
+		@apply leading-default tracking-default text-default font-romie max-w-vw flex min-h-dvh w-screen flex-col overflow-x-clip bg-white;
 		transition: opacity 1s ease;
 	}
 
