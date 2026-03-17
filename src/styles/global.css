@@ -6,6 +6,7 @@
 	--color-inherit: inherit;
 	--color-transparent: transparent;
 	--color-white: #ffffff;
+	--color-off-white: #f2efe5;
 	--color-black: #000000;
 
 	/* Spacing */
@@ -31,6 +32,7 @@
 	--text-*: initial;
 	--text-default: 1rem;
 	--text-12: 0.75rem;
+	--text-14: 0.875rem;
 	--text-30: 1.875rem;
 
 	/* Leading */
@@ -94,12 +96,11 @@
     */
 
 	* {
-		/* selection:bg-green-light selection:text-green-dark */
-		@apply focus:outline-none focus-visible:outline-offset-2 focus-visible:outline-current focus-visible:outline-dotted;
+		@apply selection:bg-black selection:text-white focus:outline-none focus-visible:outline-offset-2 focus-visible:outline-current focus-visible:outline-dotted;
 	}
 
 	body {
-		@apply leading-default tracking-default text-default font-romie max-w-vw flex min-h-dvh w-screen flex-col overflow-x-clip;
+		@apply leading-default tracking-default text-default font-romie max-w-vw flex min-h-dvh w-screen flex-col overflow-x-clip bg-off-white;
 		transition: opacity 1s ease;
 	}
 
