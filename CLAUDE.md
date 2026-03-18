@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Freja is the website for FREYJA, a Nordic/Northumbrian restaurant opening Autumn 2026. Built with Astro 6, Tailwind CSS 4, and TypeScript (strict mode).
+Freyja is the website for FREYJA, a Nordic/Northumbrian restaurant opening Autumn 2026. Built with Astro 6, Tailwind CSS 4, and TypeScript (strict mode).
 
 ## Commands
 
